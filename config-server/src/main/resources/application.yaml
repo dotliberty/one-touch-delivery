@@ -1,3 +1,24 @@
+server:
+  port: 8888
+
 spring:
   application:
     name: config-server
+
+  # use spring.cloud.config.server.git.uri in production
+  # (etc. in git repository)
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, env, mappings
+
+logging:
+  level:
+    org.springframework.cloud.config: INFO
