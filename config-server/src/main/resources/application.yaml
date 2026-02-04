@@ -5,6 +5,10 @@ spring:
   application:
     name: config-server
 
+  # it uses for local run project
+  profiles:
+    active: native
+
   # use spring.cloud.config.server.git.uri in production
   # (etc. in git repository)
   cloud:
