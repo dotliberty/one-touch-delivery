@@ -15,4 +15,5 @@ public class ValidateTokenResponse {
     private Long userId;
     private String email;
     private Role role;
+
 }

@@ -14,4 +14,5 @@ public class ValidateTokenRequest {
 
     @NotBlank(message = "Token is required")
     private String token;
+
 }
