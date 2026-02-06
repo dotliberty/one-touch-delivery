@@ -1,6 +1,6 @@
-package dot.liberty.auth_service.dto.response;
+package dot.liberty.auth.dto.request;
 
-import dot.liberty.auth_service.entity.Role;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
+public class ValidateTokenRequest {
 
+    @NotBlank(message = "Token is required")
     private String token;
-    private Long userId;
-
-    private String email;
-    private Role role;
 }

@@ -1,4 +1,4 @@
-package dot.liberty.auth_service.security;
+package dot.liberty.auth.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

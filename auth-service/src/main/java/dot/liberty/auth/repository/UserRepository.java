@@ -1,6 +1,6 @@
-package dot.liberty.auth_service.repository;
+package dot.liberty.auth.repository;
 
-import dot.liberty.auth_service.entity.User;
+import dot.liberty.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

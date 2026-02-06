@@ -1,4 +1,4 @@
-package dot.liberty.auth_service;
+package dot.liberty.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

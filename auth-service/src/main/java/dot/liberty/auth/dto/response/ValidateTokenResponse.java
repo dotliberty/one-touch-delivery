@@ -1,6 +1,6 @@
-package dot.liberty.auth_service.dto.response;
+package dot.liberty.auth.dto.response;
 
-import dot.liberty.auth_service.entity.Role;
+import dot.liberty.auth.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package dot.liberty.auth_service.entity;
+package dot.liberty.auth.entity;
 
 public enum Role {
     CUSTOMER,
