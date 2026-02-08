@@ -1,6 +1,7 @@
 package dot.liberty.auth.service;
 
 import dot.liberty.auth.repository.UserRepository;
+import dot.liberty.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,5 +12,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
 }
