@@ -1,7 +1,17 @@
 package dot.liberty.auth.exception;
 
 public class InvalidCredentialsException extends RuntimeException {
-    public InvalidCredentialsException(String message) {
+
+    private InvalidCredentialsException(String message) {
         super(message);
     }
+
+    public static InvalidCredentialsException byInvalidCredentials() {
+        return new InvalidCredentialsException("Invalid credentials");
+    }
+
+    public static InvalidCredentialsException byInvalidToken() {
+        return new InvalidCredentialsException("Invalid or expired token");
+    }
+
 }
