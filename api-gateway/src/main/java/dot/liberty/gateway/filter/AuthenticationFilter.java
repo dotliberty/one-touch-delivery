@@ -1,9 +1,11 @@
 package dot.liberty.gateway.filter;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
@@ -19,6 +21,16 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     @Override
     public GatewayFilter apply(Config config) {
         return null;
+    }
+
+    private Mono<ValidateTokenResponse> validateToken(String token) {
+        return webClientBuilder.build()
+                .post()
+                .uri("lb://auth-service/api/auth/validate")
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .bodyValue(new ValidateTokenRequest(token))
+                .retrieve()
+                .bodyToMono(ValidateTokenResponse.class);
     }
 
     public static class Config {
