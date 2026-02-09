@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,7 +25,42 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     @Override
     public GatewayFilter apply(Config config) {
-        return null;
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+
+            if (isPublicPath(request.getPath().toString())) {
+                return chain.filter(exchange);
+            }
+
+            HttpHeaders headers = request.getHeaders();
+
+            if (areHeadersNotContainBearerHeader(headers))
+                return onError(exchange, "Missing authorization header");
+
+            String authHeader = headers.getFirst(
+                    HttpHeaders.AUTHORIZATION);
+
+            if (isAuthHeaderInvalid(authHeader))
+                return onError(exchange, "Invalid authorization header");
+
+            String token = authHeader.substring(7);
+
+            return validateToken(token)
+                    .flatMap(validationResponse -> {
+                        ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+                                .header("X-User-Id", validationResponse.getUserId().toString())
+                                .header("X-User-Email", validationResponse.getEmail())
+                                .header("X-User-Role", validationResponse.getRole())
+                                .build();
+
+                        return chain.filter(
+                                exchange.mutate()
+                                        .request(modifiedRequest)
+                                        .build());
+                    })
+                    .onErrorResume(error -> onError(
+                            exchange, "Invalid or expired token"));
+        };
     }
 
     private Mono<ValidateTokenResponse> validateToken(String token) {
@@ -42,9 +78,17 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             || path.startsWith("/actuator/");
     }
 
-    private Mono<Void> onError(ServerWebExchange exchange, String message, HttpStatus status) {
+    private boolean areHeadersNotContainBearerHeader(HttpHeaders headers) {
+        return !headers.containsKey(HttpHeaders.AUTHORIZATION);
+    }
+
+    private boolean isAuthHeaderInvalid(String authHeader) {
+        return authHeader == null || !authHeader.startsWith("Bearer ");
+    }
+
+    private Mono<Void> onError(ServerWebExchange exchange, String message) {
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(status);
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
         response.getHeaders()
                 .add(HttpHeaders.CONTENT_TYPE, "application/json");
