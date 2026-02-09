@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EmailService {
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private final JavaMailSender mailSender;
 
 }
