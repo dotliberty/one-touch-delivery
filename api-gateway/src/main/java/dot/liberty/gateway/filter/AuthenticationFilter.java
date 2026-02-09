@@ -33,6 +33,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 .bodyToMono(ValidateTokenResponse.class);
     }
 
+    private boolean isPublicPath(String path) {
+        return path.startsWith("/api/auth/")
+            || path.startsWith("/actuator/");
+    }
+
     public static class Config {
 
     }
