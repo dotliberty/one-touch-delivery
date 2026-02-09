@@ -1,10 +1,14 @@
 package dot.liberty.gateway.filter;
 
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -36,6 +40,21 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     private boolean isPublicPath(String path) {
         return path.startsWith("/api/auth/")
             || path.startsWith("/actuator/");
+    }
+
+    private Mono<Void> onError(ServerWebExchange exchange, String message, HttpStatus status) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(status);
+
+        response.getHeaders()
+                .add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        String errorBody = String.format("{\"error\":\"%s\"}", message);
+
+        DataBuffer action = response.bufferFactory()
+                .wrap(errorBody.getBytes());
+
+        return response.writeWith(Mono.just(action));
     }
 
     public static class Config {
