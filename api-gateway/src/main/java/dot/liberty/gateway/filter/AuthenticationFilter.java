@@ -34,14 +34,16 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             HttpHeaders headers = request.getHeaders();
 
-            if (areHeadersNotContainBearerHeader(headers))
+            if (areHeadersNotContainBearerHeader(headers)) {
                 return onError(exchange, "Missing authorization header");
+            }
 
             String authHeader = headers.getFirst(
                     HttpHeaders.AUTHORIZATION);
 
-            if (isAuthHeaderInvalid(authHeader))
+            if (isAuthHeaderInvalid(authHeader)) {
                 return onError(exchange, "Invalid authorization header");
+            }
 
             String token = authHeader.substring(7);
 
