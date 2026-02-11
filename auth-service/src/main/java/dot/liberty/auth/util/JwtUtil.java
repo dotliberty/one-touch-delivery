@@ -59,11 +59,11 @@ public class JwtUtil {
     private boolean tryCatchConstructionOfValidationToken(String token) {
         try {
             validateTokenWithoutTryCatchConstruction(token);
-
-            return true;
         } catch (Exception e) {
             return false;
         }
+
+        return true;
     }
 
     private void validateTokenWithoutTryCatchConstruction(String token) {

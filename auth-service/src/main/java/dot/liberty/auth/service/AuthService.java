@@ -50,9 +50,9 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(InvalidCredentialsException::byInvalidCredentials);
 
-        if (!passwordEncoder.matches(
-                request.getPassword(), user.getPassword()))
+        if (!isPasswordTryingCorrect(request, user)) {
             throw InvalidCredentialsException.byInvalidCredentials();
+        }
 
         return generateAuthResponse(user);
     }
@@ -62,8 +62,9 @@ public class AuthService {
             throws InvalidCredentialsException {
         String token = request.getToken();
 
-        if (!jwtUtil.validateToken(token))
-            throw InvalidCredentialsException.byInvalidCredentials();
+        if (!jwtUtil.validateToken(token)) {
+            throw InvalidCredentialsException.byInvalidToken();
+        }
 
         Long userId = jwtUtil.extractUserId(token);
         String email = jwtUtil.extractEmail(token);
@@ -76,6 +77,13 @@ public class AuthService {
                 .email(email)
                 .role(role)
                 .build();
+    }
+
+    private boolean isPasswordTryingCorrect(LoginRequest request, User user) {
+        return passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        );
     }
 
     private AuthResponse generateAuthResponse(User user) {
