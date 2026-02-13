@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResendVerificationCodeRequest {
+public class ResendVerificationRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")

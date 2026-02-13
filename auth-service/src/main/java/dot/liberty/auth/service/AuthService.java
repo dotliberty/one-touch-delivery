@@ -88,7 +88,7 @@ public class AuthService {
         return generateAuthResponse(user);
     }
 
-    public VerificationSentResponse resendVerificationCode(ResendVerificationCodeRequest request) {
+    public VerificationSentResponse resendVerificationCode(ResendVerificationRequest request) {
         User user = findUserAndThrowExceptionIfSearchingIsFailed(request.getEmail());
 
         if (user.getIsEmailVerified()) {
