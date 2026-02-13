@@ -1,4 +1,4 @@
-package dot.liberty.auth.client;
+package dot.liberty.auth.client.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
