@@ -6,6 +6,10 @@ public class InvalidCredentialsException extends RuntimeException {
         super(message);
     }
 
+    public static InvalidCredentialsException ifUserIsNotFounded() {
+        return new InvalidCredentialsException("User not found");
+    }
+
     public static InvalidCredentialsException byInvalidCredentials() {
         return new InvalidCredentialsException("Invalid credentials");
     }
