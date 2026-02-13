@@ -1,7 +1,7 @@
 package dot.liberty.auth.exception;
 
 public class InvalidVerificationCodeException extends RuntimeException {
-    public InvalidVerificationCodeException(String message) {
-        super(message);
+    public InvalidVerificationCodeException() {
+        super("Invalid verification code");
     }
 }
